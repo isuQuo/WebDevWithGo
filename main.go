@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -13,7 +14,14 @@ func errorHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Welcome to my awesome site!</h1>")
+	tpl, err := template.ParseFiles("templates/home.gohtml")
+	if err != nil {
+		panic(err)
+	}
+	err = tpl.Execute(w, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
