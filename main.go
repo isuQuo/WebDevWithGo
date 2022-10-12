@@ -8,13 +8,8 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func errorHandler(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Page not found", http.StatusNotFound)
-	//w.WriteHeader(http.StatusNotFound)
-}
-
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles("templates/home.gohtml")
+func executeTemplate(w http.ResponseWriter, filepath string) {
+	tpl, err := template.ParseFiles(filepath)
 	if err != nil {
 		panic(err)
 	}
@@ -24,8 +19,17 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func errorHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "Page not found", http.StatusNotFound)
+	//w.WriteHeader(http.StatusNotFound)
+}
+
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	executeTemplate(w, "templates/home.gohtml")
+}
+
 func contactHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Contact Page</h1><p>To get in touch, email me at <a href=\"mailto:yes@gmail.com\">yes@gmail.com</a>")
+	executeTemplate(w, "templates/contact.gohtml")
 }
 
 func main() {
