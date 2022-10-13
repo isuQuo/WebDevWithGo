@@ -1,22 +1,19 @@
 package main
 
 import (
+	"WebDevWithGo/views"
 	"fmt"
-	"html/template"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 )
 
 func executeTemplate(w http.ResponseWriter, filepath string) {
-	tpl, err := template.ParseFiles(filepath)
+	tpl, err := views.Parse(filepath)
 	if err != nil {
 		panic(err)
 	}
-	err = tpl.Execute(w, nil)
-	if err != nil {
-		panic(err)
-	}
+	tpl.Execute(w, nil)
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request) {
