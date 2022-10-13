@@ -1,32 +1,18 @@
 package main
 
 import (
-	"html/template"
-	"os"
+	"fmt"
+	"sort"
 )
 
-type User struct {
-	Name string
-}
-
 func main() {
-	t, err := template.ParseFiles("hello.gohtml")
-	if err != nil {
-		panic(err)
-	}
+	numbers := []int{1, 11, -5, 8, 2, 0, 12}
+	sort.Ints(numbers)
+	fmt.Println("Sorted:", numbers)
 
-	/* user := struct {
-		Name string
-	}{
-		Name: "John Smith",
-	} */
-
-	user := User{
-		Name: "John Smith",
-	}
-
-	err = t.Execute(os.Stdout, user)
-	if err != nil {
-		panic(err)
-	}
+	index := sort.Search(len(numbers), func(i int) bool {
+		return numbers[i] >= 7
+	})
+	fmt.Println("The first number >= 7 is at index:", index)
+	fmt.Println("The first number >= 7 is:", numbers[index])
 }
