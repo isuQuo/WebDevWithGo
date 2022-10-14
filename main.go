@@ -2,6 +2,7 @@ package main
 
 import (
 	"WebDevWithGo/controllers"
+	"WebDevWithGo/templates"
 	"WebDevWithGo/views"
 	"fmt"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 )
 
 func executeTemplate(filepath string) views.Template {
-	tpl, err := views.Parse(filepath)
+	tpl, err := views.ParseFS(templates.FS, filepath)
 	if err != nil {
 		panic(err)
 	}
@@ -24,8 +25,8 @@ func errorHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := chi.NewRouter()
-	r.Get("/", controllers.StaticHandler(executeTemplate("templates/home.gohtml")))
-	r.Get("/contact", controllers.StaticHandler(executeTemplate("templates/contact.gohtml")))
+	r.Get("/", controllers.StaticHandler(executeTemplate("home.gohtml")))
+	r.Get("/contact", controllers.StaticHandler(executeTemplate("contact.gohtml")))
 	r.NotFound(errorHandler)
 	fmt.Println("Starting the server on :3000...")
 	http.ListenAndServe("127.0.0.1:3000", r)
