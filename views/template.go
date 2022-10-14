@@ -11,7 +11,7 @@ type Template struct {
 }
 
 func (t *Template) Execute(w http.ResponseWriter, data interface{}) {
-	err := t.htmlTpl.Execute(w, nil)
+	err := t.htmlTpl.Execute(w, data)
 	if err != nil {
 		panic(err)
 	}
@@ -28,8 +28,8 @@ func Parse(filepath string) (Template, error) {
 	}, nil
 }
 
-func ParseFS(fs fs.FS, pattern string) (Template, error) {
-	tpl, err := template.ParseFS(fs, pattern)
+func ParseFS(fs fs.FS, patterns ...string) (Template, error) {
+	tpl, err := template.ParseFS(fs, patterns...)
 	if err != nil {
 		panic(err)
 	}

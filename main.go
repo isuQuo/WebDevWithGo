@@ -27,6 +27,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Get("/", controllers.StaticHandler(executeTemplate("home.gohtml")))
 	r.Get("/contact", controllers.StaticHandler(executeTemplate("contact.gohtml")))
+	r.Get("/faq", controllers.FAQ(executeTemplate("faq.gohtml")))
 	r.NotFound(errorHandler)
 	fmt.Println("Starting the server on :3000...")
 	http.ListenAndServe("127.0.0.1:3000", r)
