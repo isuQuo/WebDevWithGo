@@ -1,17 +1,17 @@
 package controllers
 
 import (
-	"WebDevWithGo/views"
 	"net/http"
 )
 
-func StaticHandler(tpl views.Template) http.HandlerFunc {
+// would we use generics here instead of an interface as a parameter?
+func StaticHandler(tpl Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tpl.Execute(w, nil)
 	}
 }
 
-func FAQ(tpl views.Template) http.HandlerFunc {
+func FAQ(tpl Template) http.HandlerFunc {
 	questions := []struct {
 		Question string
 		Answer   string
