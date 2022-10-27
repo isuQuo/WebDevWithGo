@@ -19,7 +19,7 @@ func (u Users) New(w http.ResponseWriter, r *http.Request) {
 		Email string
 	}
 	data.Email = r.FormValue("email")
-	u.Templates.New.Execute(w, data)
+	u.Templates.New.Execute(w, r, data)
 }
 
 func (u Users) Create(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +38,7 @@ func (u Users) SignIn(w http.ResponseWriter, r *http.Request) {
 		Email string
 	}
 	data.Email = r.FormValue("email")
-	u.Templates.SignIn.Execute(w, data)
+	u.Templates.SignIn.Execute(w, r, data)
 }
 
 func (u Users) Authenticate(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +48,21 @@ func (u Users) Authenticate(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Something went wrong", http.StatusInternalServerError)
 		return
 	}
+	cookie := http.Cookie{
+		Name:     "email",
+		Value:    user.Email,
+		Path:     "/",  // This cookie will be available on all routes
+		HttpOnly: true, // This cookie will not be available to JavaScript
+	}
+	http.SetCookie(w, &cookie)
 	fmt.Printf("User signed in: %+v\n", user)
 	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (u Users) CurrentUser(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("email")
+	if err != nil {
+		return
+	}
+	fmt.Fprintf(w, "Current logged in user: %+v\n", cookie.Value)
 }
